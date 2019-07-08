@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+    body { margin: 0; position: fixed; top: 0; right: 0; bottom: 0; left: 0; }
+    svg { width: 100%; height: 100%; }
+  </style>
+</head>
+
+<body>
+  <svg></svg>
+  <script>
+    // options
+    var margin = {"top": 20, "right": 10, "bottom": 20, "left": 30 }
+    var width = 500;
+    var height = 500;
+    var rectWidth = 100;
+    
+    // data
+    var data = [[50, "red"], [100, "teal"], [125, "yellow"], [75, "purple"], [25, "green"]];
+    
+    // scales
+    var xMax = 5 * rectWidth;
+    var xScale = d3.scaleLinear()
+    	.domain([0, xMax])
+    	.range([margin.left, width - margin.right]);
+    var yMax = d3.max(data, function(d){return d[0]});
+    var yScale = d3.scaleLinear()
+    	.domain([0, yMax])
+    	.range([height - margin.bottom, margin.top]);
+     
+    // svg element
+    var svg = d3.select('svg');
+		
+    // bars 
+    var rect = svg.selectAll('rect')
+    	.data(data)
+    	.enter().append('rect')
+    	.attr('x', function(d, i){ 
+        return xScale(i * rectWidth)})
+    	.attr('y', function(d){
+        return yScale(d[0])})
+    	.attr('width', xScale(rectWidth) - margin.left)
+    	.attr('height', function(d){
+        return height - margin.bottom - yScale(d[0])})
+			.attr('fill', function(d){
+        return d[1]})
+    	.attr('margin', 0);
+    
+    // axes
+    var xAxis = d3.axisBottom()
+    	.scale(xScale)
+    	.tickFormat(d3.format('d'));
+    var yAxis = d3.axisLeft()
+    	.scale(yScale)
+    	.tickFormat(d3.format('d'));
+    
+    svg.append('g')
+      	.attr('transform', 'translate(' + [0, height - margin.bottom] + ')')
+      	.call(xAxis);
+      svg.append('g')
+      	.attr('transform', 'translate(' + [margin.left, 0] + ')')
+      	.call(yAxis);
+    
+  </script>
+</body>
+</html>
