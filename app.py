@@ -29,6 +29,7 @@ def home():
     g.raceGraph = getRaceGraph()
     g.races = getRaces()
     g.driverPoints = driverPoints()
+    g.driverChartOptions =
 
     return render_template("index.html")
 

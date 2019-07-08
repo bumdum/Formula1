@@ -2,6 +2,10 @@ var salesData;
 var runningData;
 var runningColors;
 
+var color = d3.scale.linear()
+    .range(["hsl(-180,60%,50%)", "hsl(180,60%,50%)"])
+    .interpolate(function(a, b) { var i = d3.interpolateString(a, b); return function(t) { return d3.hsl(i(t)); }; });
+
 $(document).ready(function () {
     Plot();
 });
@@ -119,7 +123,7 @@ function TransformChartData(driverPoints, opts, level, filter) {
             ditem["title"] = opts[0].captions != undefined ? opts[0].captions[0][driverPoints[i][xVarName]] : "";
             ditem["op"] = 1;
             result.push(ditem);
-            resultColors[counter] = opts[0].color != undefined ? opts[0].color[0][driverPoints[i][xVarName]] : "";
+            resultColors[counter] = color(driverPoints[i][yVarName]);
             counter += 1;
         }
     }
