@@ -28,6 +28,7 @@ f1_pit_data = Base.classes.pit_data
 def home():
     g.raceGraph = getRaceGraph()
     g.races = getRaces()
+    g.driverPoints = driverPoints()
 
     return render_template("index.html")
 
