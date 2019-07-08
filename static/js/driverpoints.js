@@ -6,10 +6,10 @@ $(document).ready(function () {
     Plot();
 });
 function Plot() {
-    TransformChartData(chartData, chartOptions);
-    BuildBar("chart", chartData, chartOptions);
+    TransformChartData(driverPoints, driverChartOptions);
+    BuildBar("chart", driverPoints, driverChartOptions);
 }
-function BuildBar(id, chartData, options, level) {
+function BuildBar(id, driverPoints, options, level) {
     chart = d3.select("#" + id + " .innerCont");
     var margin = { top: 50, right: 10, bottom: 30, left: 50 },
     width = $(chart[0]).outerWidth() - margin.left - margin.right,
@@ -93,7 +93,7 @@ function BuildBar(id, chartData, options, level) {
         .style("text-anchor", "end")
 
 }
-function TransformChartData(chartData, opts, level, filter) {
+function TransformChartData(driverPoints, opts, level, filter) {
     var result = [];
     var resultColors = [];
     var counter = 0;
@@ -101,25 +101,25 @@ function TransformChartData(chartData, opts, level, filter) {
     var xVarName;
     var yVarName = opts[0].yaxis;
     xVarName = opts[0].xaxis;
-    for (var i in chartData) {
+    for (var i in driverPoints) {
         hasMatch = false;
         for (var index = 0; index < result.length; ++index) {
             var data = result[index];
-            if (data[xVarName] == chartData[i][xVarName]) {
-                result[index][yVarName] = result[index][yVarName] + chartData[i][yVarName];
+            if (data[xVarName] == driverPoints[i][xVarName]) {
+                result[index][yVarName] = result[index][yVarName] + driverPoints[i][yVarName];
                 hasMatch = true;
                 break;
             }
         }
         if (hasMatch == false) {
             ditem = {};
-            ditem[xVarName] = chartData[i][xVarName];
-            ditem[yVarName] = chartData[i][yVarName];
-            ditem["caption"] = opts[0].captions != undefined ? opts[0].captions[0][chartData[i][xVarName]] : "";
-            ditem["title"] = opts[0].captions != undefined ? opts[0].captions[0][chartData[i][xVarName]] : "";
+            ditem[xVarName] = driverPoints[i][xVarName];
+            ditem[yVarName] = driverPoints[i][yVarName];
+            ditem["caption"] = opts[0].captions != undefined ? opts[0].captions[0][driverPoints[i][xVarName]] : "";
+            ditem["title"] = opts[0].captions != undefined ? opts[0].captions[0][driverPoints[i][xVarName]] : "";
             ditem["op"] = 1;
             result.push(ditem);
-            resultColors[counter] = opts[0].color != undefined ? opts[0].color[0][chartData[i][xVarName]] : "";
+            resultColors[counter] = opts[0].color != undefined ? opts[0].color[0][driverPoints[i][xVarName]] : "";
             counter += 1;
         }
     }
@@ -127,101 +127,3 @@ function TransformChartData(chartData, opts, level, filter) {
     runningColors = resultColors;
     return;
 }
-var chartData = [
-    {
-        "Country": "USA",
-        "Model": "Model 1",
-        "Total": 487
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 2",
-        "Total": 185
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 3",
-        "Total": 140
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 4",
-        "Total": 108
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 5",
-        "Total": 26
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 6",
-        "Total": 106
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 7",
-        "Total": 27
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 8",
-        "Total": 44
-    },
-    {
-        "Country": "USA",
-        "Model": "Model 9",
-        "Total": 96
-    },
-    {
-        "Country": "INDIA",
-        "Model": "Model 1",
-        "Total": 411
-    },
-    {
-        "Country": "INDIA",
-        "Model": "Model 2",
-        "Total": 33
-    },
-    {
-        "Country": "INDIA",
-        "Model": "Model 3",
-        "Total": 32
-    },
-    {
-        "Country": "INDIA",
-        "Model": "Model 4",
-        "Total": 29
-    },
-    {
-        "Country": "INDIA",
-        "Model": "Model 5",
-        "Total": 29
-    },
-    {
-        "Country": "CANADA",
-        "Model": "Model 1",
-        "Total": 7
-    },
-    {
-        "Country": "CANADA",
-        "Model": "Model 2",
-        "Total": 20
-    },
-    {
-        "Country": "CANADA",
-        "Model": "Model 3",
-        "Total": 232
-    },
-    {
-        "Country": "CANADA",
-        "Model": "Model 4",
-        "Total": 1117
-    }
-];
-chartOptions = [{
-    "captions": [{ "INDIA": "INDIA", "CANADA": "CANADA", "USA": "USA" }],
-    "color": [{ "INDIA": "#FFA500", "CANADA": "#0070C0", "USA": "#ff0000" }],
-    "xaxis": "Country",
-    "yaxis": "Total"
-}]

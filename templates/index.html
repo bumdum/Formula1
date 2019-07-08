@@ -6,7 +6,8 @@
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   var races = {{ g.races|safe }};
   var raceGraph = {{ g.raceGraph|safe }};
-  var driverPoints = {{ g.driverPoints }};
+  var driverPoints = {{ g.driverPoints|safe }};
+  var driverChartOptions = {{g.driverChartOptions|safe}}
 </script>
 <nav>
   <h1>Formula 1</h1>
