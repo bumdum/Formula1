@@ -28,8 +28,6 @@ f1_pit_data = Base.classes.pit_data
 def home():
     g.raceGraph = getRaceGraph()
     g.races = getRaces()
-    g.driverPoints = driverPoints()
-    g.driverChartOptions =
 
     return render_template("index.html")
 
@@ -237,9 +235,11 @@ def getRaces():
     races = db.session.query(f1_data.raceId,f1_data.RaceName).filter_by(year = '2017').distinct(f1_data.raceId,f1_data.RaceName).all()
     return [dict(zip(tuple ('rn') , i)) for i in races]
 
-def driverPoints():
-    driverPoints = db.session.query(f1_data.driverRef,f1_data.points).filter_by(raceId = '974').distinct(f1_data.raceId,f1_data.RaceName).all()
-    return [dict(zip(tuple ('dp') , i)) for i in driverPoints]
+@app.route("/bar_chart")
+def barchart():
+    data = db.session.query(f1_data.driverRef,f1_data.points).filter_by(raceId = '974').distinct(f1_data.raceId,f1_data.RaceName).all()
+    g.driverPoints = [dict(zip(tuple ('dp') , i)) for i in data]
+    return render_template("barchart.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

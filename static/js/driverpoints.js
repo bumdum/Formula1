@@ -1,6 +1,5 @@
 var salesData;
 var runningData;
-var runningColors;
 
 var color = d3.scale.linear()
     .range(["hsl(-180,60%,50%)", "hsl(180,60%,50%)"])
@@ -10,17 +9,17 @@ $(document).ready(function () {
     Plot();
 });
 function Plot() {
-    TransformChartData(driverPoints, driverChartOptions);
-    BuildBar("chart", driverPoints, driverChartOptions);
+    TransformChartData(driverPoints);
+    BuildBar("chart", driverPoints);
 }
-function BuildBar(id, driverPoints, options, level) {
+function BuildBar(id, driverPoints, level) {
     chart = d3.select("#" + id + " .innerCont");
     var margin = { top: 50, right: 10, bottom: 30, left: 50 },
     width = $(chart[0]).outerWidth() - margin.left - margin.right,
     height = $(chart[0]).outerHeight() - margin.top - margin.bottom
     var xVarName;
-    var yVarName = options[0].yaxis;
-    xVarName = options[0].xaxis;
+    var yVarName = 'p';
+    xVarName = 'd';
     var xAry = runningData.map(function (el) {
         return el[xVarName];
     });
@@ -30,7 +29,6 @@ function BuildBar(id, driverPoints, options, level) {
     var capAry = runningData.map(function (el) { return el.caption; });
     var x = d3.scale.ordinal().domain(xAry).rangeRoundBands([0, width], .5);
     var y = d3.scale.linear().domain([0, d3.max(runningData, function (d) { return d[yVarName]; })]).range([height, 0]);
-    var rcolor = d3.scale.ordinal().range(runningColors);
     chart = chart
         .append("svg")  //append svg element inside #chart
         .attr("width", width + margin.left + margin.right)    //set width
@@ -47,19 +45,19 @@ function BuildBar(id, driverPoints, options, level) {
                 .scale(x)
                 .orient("bottom").ticks(xAry.length)
                 .tickFormat(function (d) {
-                    var mapper = options[0].captions[0]
-                    return mapper[d]
+                    return d
                 });
     var yAxis = d3.svg.axis()
                     .scale(y)
                     .orient("left").ticks(5); //orient left because y-axis tick labels will appear on the left side of the axis.
     bar.append("rect")
         .attr("y", function (d) {
-            return y(d.Total) + margin.top - 15;
+            return y(d.p) + margin.top - 15;
         })
         .attr("x", function (d) {
             return (margin.left);
         })
+        .attr("width", 50)
     bar.selectAll("rect").attr("height", function (d) {
         return height - y(d[yVarName]);
     })
@@ -69,7 +67,7 @@ function BuildBar(id, driverPoints, options, level) {
         .transition().delay(function (d, i) { return i * 300; })
         .duration(1000);
     bar.selectAll("rect").style("fill", function (d) {
-        return rcolor(d[xVarName]);
+        return color(Math.random());
     })
     bar.append("text")
     .attr("x", x.rangeBand() / 2 + margin.left - 10)
@@ -103,8 +101,8 @@ function TransformChartData(driverPoints, opts, level, filter) {
     var counter = 0;
     var hasMatch;
     var xVarName;
-    var yVarName = opts[0].yaxis;
-    xVarName = opts[0].xaxis;
+    var yVarName = 'p';
+    xVarName = 'd';
     for (var i in driverPoints) {
         hasMatch = false;
         for (var index = 0; index < result.length; ++index) {
@@ -119,15 +117,14 @@ function TransformChartData(driverPoints, opts, level, filter) {
             ditem = {};
             ditem[xVarName] = driverPoints[i][xVarName];
             ditem[yVarName] = driverPoints[i][yVarName];
-            ditem["caption"] = opts[0].captions != undefined ? opts[0].captions[0][driverPoints[i][xVarName]] : "";
-            ditem["title"] = opts[0].captions != undefined ? opts[0].captions[0][driverPoints[i][xVarName]] : "";
+            ditem["caption"] = driverPoints[i][xVarName];
+            ditem["title"] = driverPoints[i][xVarName];
             ditem["op"] = 1;
             result.push(ditem);
-            resultColors[counter] = color(driverPoints[i][yVarName]);
+            //console.log(JSON.stringify(ditem));
             counter += 1;
         }
     }
     runningData = result;
-    runningColors = resultColors;
     return;
 }

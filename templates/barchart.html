@@ -1,0 +1,49 @@
+<!doctype html>
+<title>Formula 1</title>
+<style>
+body {
+    margin: 0;
+    padding: 10px;
+    background-color: #000000;
+    font-family: sans-serif;
+    font-size: 12px;
+    color: #666666;
+    overflow: hidden;
+}
+#chart text {
+    fill: whitesmoke;
+    font: 10px sans-serif;
+    text-anchor: end;
+}
+.axis text {
+    font: 10px sans-serif;
+}
+.axis path, .axis line {
+    fill: none;
+    /*stroke: #fff;*/
+    shape-rendering: crispEdges;
+}
+path {
+        stroke: steelblue;
+        stroke-width: 2;
+        fill: none;
+    }
+</style>
+
+<script>
+    var driverPoints = {{ g.driverPoints| safe }};
+</script>
+<nav>
+    <h1>Formula 1</h1>
+</nav>
+<section class="content">
+    <div id="chart" style="height:600px;width:1400px">
+        <div class="innerCont"
+            style="overflow: auto; top:50px; left: 100px; height:91% ; Width:100% ;position: relative;overflow: hidden;">
+        </div>
+    </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/jquery-3.4.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/d3.v3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/driverpoints.js') }}"></script>

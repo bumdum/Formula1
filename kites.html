@@ -80,6 +80,7 @@
                     .orient("bottom").ticks(xAry.length)
                     .tickFormat(function (d) {
                         var mapper = options[0].captions[0]
+                        console.log(mapper[d])
                         return mapper[d]
                     });
         var yAxis = d3.svg.axis()
